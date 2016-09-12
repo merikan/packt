@@ -30,6 +30,9 @@ title="${title%"${title##*[![:space:]]}"}"   `#remove trailing blanks`
 echo "Today's free e-book: $title"
 log "Today's free e-book: $title"
 
+bookdir="$dldir/Packt - $title"
+mkdir -p "$bookdir"
+
 # claim
 claim=$(grep -oE "freelearning-claim/[0-9]+/[0-9]+" packt_daily.html)
 curl -s --retry $rtry -m $tout -A "$agent" -b "$cookie" -c "$cookie" -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' -H 'Accept-Encoding: gzip, deflate' -H 'Accept-Language: en-US,en;q=0.5' -H 'Connection: keep-alive' -H 'Host: www.packtpub.com' -H 'Referer: https://www.packtpub.com/packt/offers/free-learning' "https://www.packtpub.com/$claim"
@@ -41,13 +44,13 @@ log "e-Book claimed"
 book=$(echo $claim | sed 's/.*\/\([0-9]*\)\/.*/\1/')
 
 # PDF download
-curl -s -L --retry $rtry -A "$agent" -b "$cookie" -c "$cookie" "https://www.packtpub.com/ebook_download/$book/pdf" > "$dldir/$title.pdf"
+curl -s -L --retry $rtry -A "$agent" -b "$cookie" -c "$cookie" "https://www.packtpub.com/ebook_download/$book/pdf" > "$bookdir/$title.pdf"
 cex=$?; test "$cex" -ne "0" && { log "curl exit error code: $cex"; exit; }
 echo "PDF downloaded"
 log "PDF downloaded"
 
 # Mobi download
-curl -s -L --retry $rtry -A "$agent" -b "$cookie" -c "$cookie" "https://www.packtpub.com/ebook_download/$book/mobi" > "$dldir/$title.mobi"
+curl -s -L --retry $rtry -A "$agent" -b "$cookie" -c "$cookie" "https://www.packtpub.com/ebook_download/$book/mobi" > "$bookdir/$title.mobi"
 cex=$?; test "$cex" -ne "0" && { log "curl exit error code: $cex"; exit; }
 echo "Mobi downloaded"
 log "Mobi downloaded"
