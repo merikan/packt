@@ -26,6 +26,7 @@ curl -s --retry $rtry -m $tout -A "$agent" -b "$cookie" -c "$cookie" https://www
 cex=$?; test "$cex" -ne "0" && { log "curl exit error code: $cex"; exit; }
 
 title=$(grep "dotd-title" -A 2 packt_daily.html | tail -1 | sed 's/^[^0-9A-Za-z]*//;s/[\t ]*<\/h2>$//')
+title="${title%"${title##*[![:space:]]}"}"   `#remove trailing blanks`
 echo "Today's free e-book: $title"
 log "Today's free e-book: $title"
 
