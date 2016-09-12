@@ -12,6 +12,8 @@ function log {
 log "*** Packt started ***"
 rm -f $cookie packt*.html
 
+[ -d $dldir ] || log "Creating directory $dldir" && mkdir -p $dldir
+
 # login
 log "Packt web login"
 
