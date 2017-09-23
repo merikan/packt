@@ -61,6 +61,15 @@ cex=$?; test "$cex" -ne "0" && { log "curl exit error code: $cex"; exit; }
 echo "Epub downloaded"
 log "Epub downloaded"
 
+# code download 
+# https://www.packtpub.com/code_download/21835
+# https://www.packtpub.com/ebook_download/21834/mobi
+code=$((book + 1))
+curl -s -L --retry $rtry -A "$agent" -b "$cookie" -c "$cookie" "https://www.packtpub.com/code_download/$code" > "$bookdir/$title.zip"
+cex=$?; test "$cex" -ne "0" && { log "curl exit error code: $cex"; exit; }
+echo "Code downloaded"
+log "Code downloaded"
+
 # Packt logout
 curl -s --retry $rtry -m $tout -A "$agent" -b "$cookie" -c "$cookie" https://www.packtpub.com/logout > packt_logout.html
 cex=$?; test "$cex" -ne "0" && { log "curl exit error code: $cex"; exit; }
